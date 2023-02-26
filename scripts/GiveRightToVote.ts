@@ -4,8 +4,6 @@ import { Ballot__factory } from "../typechain-types";
 
 dotenv.config();
 
-//sampleAddress = 0xdD2FD4581271e230360230F9337D5c0430Bf44C0
-
 async function main() {
   const provider = new ethers.providers.AlchemyProvider(
     "goerli",
@@ -29,11 +27,10 @@ async function main() {
   console.log("Ballot Address: " + ballotAddress);
   console.log("Voter:" + voter);
   const ballotContractFactory = new Ballot__factory(signer);
-  console.log("Deploying ballot contract...");
   const ballotContract = await ballotContractFactory.attach(ballotAddress);
 
-  const giveVotingRights = await ballotContract.giveRightToVote(voter);
-  console.log(voter);
+  await ballotContract.giveRightToVote(voter);
+  console.log(`Voting rights have been granted to ${voter} `);
 }
 
 main().catch((error) => {

@@ -21,16 +21,19 @@ async function main() {
   const params = args.slice(2);
   if (params.length <= 0) {
     throw new Error("Missing argument: contract address");
-  } else if (params.length <= 1) throw new Error("Missing argument: vote");
+  } else if (params.length <= 1)
+    throw new Error("Missing argument: delegate address");
 
   const ballotAddress = params[0];
-  const vote = params[1];
+  const delegatedAddress = params[1];
 
   const ballotContractFactory = new Ballot__factory(signer);
   const ballotContract = await ballotContractFactory.attach(ballotAddress);
 
-  const placeVote = await ballotContract.vote(vote);
-  console.log(`Vote has been placed for Proposol index ${vote} `);
+  const assignDelegate = await ballotContract.delegate(delegatedAddress);
+  console.log(
+    `${signer.address} has delegated their voting rights to ${delegatedAddress}`
+  );
 }
 
 main().catch((error) => {

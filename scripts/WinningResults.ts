@@ -19,18 +19,20 @@ async function main() {
 
   const args = process.argv;
   const params = args.slice(2);
-  if (params.length <= 0) {
-    throw new Error("Missing argument: contract address");
-  } else if (params.length <= 1) throw new Error("Missing argument: vote");
+  if (params.length <= 0) throw new Error("Missing argument: contract address");
 
   const ballotAddress = params[0];
-  const vote = params[1];
 
   const ballotContractFactory = new Ballot__factory(signer);
   const ballotContract = await ballotContractFactory.attach(ballotAddress);
 
-  const placeVote = await ballotContract.vote(vote);
-  console.log(`Vote has been placed for Proposol index ${vote} `);
+  const ballotEntries = await ballotContract.proposals.name;
+  const results = await ballotContract.winningProposal();
+  const winnerName = await ballotContract.winnerName();
+
+  console.log({ ballotEntries });
+  console.log(results);
+  console.log(winnerName);
 }
 
 main().catch((error) => {
