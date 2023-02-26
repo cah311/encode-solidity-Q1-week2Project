@@ -52,4 +52,14 @@ describe("Ballot", function () {
       expect(chairpersonVoter.weight).to.eq(1);
     });
   });
+
+  describe("When giving the right to vote", function () {
+    it("Should not allow someone either than the chairperson to give voting rights", async function () {
+      const signers = await ethers.getSigners();
+
+      await expect(
+        ballotContract.connect(signers[1]).giveRightToVote(signers[2].address)
+      ).to.be.revertedWith("Only chairperson can give right to vote.");
+    });
+  });
 });
