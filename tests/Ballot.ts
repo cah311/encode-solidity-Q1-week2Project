@@ -22,8 +22,8 @@ describe("Ballot", function () {
     );
     await ballotContract.deployTransaction.wait();
   });
-  describe("when the contract is deployed", function () {
-    it("has the provided proposals", async function () {
+  describe("When the contract is deployed", function () {
+    it("Has the provided proposals", async function () {
       for (let index = 0; index < PROPOSALS.length; index++) {
         const proposal = await ballotContract.proposals(index);
         expect(ethers.utils.parseBytes32String(proposal.name)).to.eq(
@@ -32,21 +32,21 @@ describe("Ballot", function () {
       }
     });
 
-    it("has zero votes for all proposals", async function () {
+    it("Has zero votes for all proposals", async function () {
       for (let index = 0; index < PROPOSALS.length; index++) {
         const proposal = await ballotContract.proposals(index);
         expect(proposal.voteCount).to.eq(0);
       }
     });
 
-    it("sets the deployer address as chairperson", async function () {
+    it("Sets the deployer address as chairperson", async function () {
       const signers = await ethers.getSigners();
       const deployerAddress = signers[0].address;
       const chairperson = await ballotContract.chairperson();
       expect(chairperson).to.eq(deployerAddress);
     });
 
-    it("sets the voting weight for the chairperson as 1", async function () {
+    it("Sets the voting weight for the chairperson as 1", async function () {
       const chairperson = await ballotContract.chairperson();
       const chairpersonVoter = await ballotContract.voters(chairperson);
       expect(chairpersonVoter.weight).to.eq(1);
@@ -60,6 +60,15 @@ describe("Ballot", function () {
       await expect(
         ballotContract.connect(signers[1]).giveRightToVote(signers[2].address)
       ).to.be.revertedWith("Only chairperson can give right to vote.");
+    });
+
+    it("Give's the right to vote", async function () {
+      const signers = await ethers.getSigners();
+      await ballotContract
+        .connect(signers[0])
+        .giveRightToVote(signers[1].address);
+      const newVoter = ballotContract.voters(signers[1].address);
+      await expect((await newVoter).weight).to.eq(1);
     });
   });
 });
