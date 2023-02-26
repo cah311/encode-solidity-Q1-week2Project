@@ -47,6 +47,8 @@ async function main() {
   console.log(
     `The ballot contract was deployed at address ${ballotContract.address} in the block number ${txReciept.blockNumber}`
   );
+
+  return ballotContract;
 }
 
 main().catch((error) => {

@@ -64,11 +64,22 @@ describe("Ballot", function () {
 
     it("Give's the right to vote", async function () {
       const signers = await ethers.getSigners();
+      console.log({ signers });
       await ballotContract
         .connect(signers[0])
         .giveRightToVote(signers[1].address);
       const newVoter = ballotContract.voters(signers[1].address);
       await expect((await newVoter).weight).to.eq(1);
+    });
+    it("Should reject giving rights to voters who have already voted", async function () {
+      const signers = await ethers.getSigners();
+      await ballotContract
+        .connect(signers[0])
+        .giveRightToVote(signers[1].address);
+      await ballotContract.connect(signers[1]).vote(1);
+      await expect(
+        ballotContract.connect(signers[0]).giveRightToVote(signers[1].address)
+      ).to.be.revertedWith("The voter already voted.");
     });
   });
 });
