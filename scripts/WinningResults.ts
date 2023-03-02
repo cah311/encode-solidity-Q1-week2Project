@@ -28,11 +28,12 @@ async function main() {
 
   const ballotEntries = await ballotContract.proposals.name;
   const results = await ballotContract.winningProposal();
-  const winnerName = await ballotContract.winnerName();
-
+  const resultsTx = await ballotContract.winnerName();
+  const winnerName = await ballotContract.winnerName.name;
   console.log({ ballotEntries });
   console.log(results);
   console.log(winnerName);
+  console.log(resultsTx);
 }
 
 main().catch((error) => {
