@@ -41,3 +41,8 @@ Winningresults script command:
 ```
 yarn run ts-node --files ./scripts/WinningResults.ts <deployed ballot address>
 ```
+
+Sample of Deployed Contract
+
+0x904Ae81f85725CE71522CE05aFBBEab587664A6f
+https://goerli.etherscan.io/address/0x904Ae81f85725CE71522CE05aFBBEab587664A6f
